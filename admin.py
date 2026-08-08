@@ -58,15 +58,29 @@ def pick_accent(books, wanted=""):
 
 
 def upsert_book(book):
-    """Insert or replace by slug; keep any 'template' entry last."""
+    """Replace an existing book in place (preserve order), else insert before 'template'."""
     books = load_books()
-    books = [b for b in books if b["slug"] != book["slug"]]
-    at = next((i for i, b in enumerate(books) if b["slug"] == "template"), len(books))
-    books.insert(at, book)
+    idx = next((i for i, b in enumerate(books) if b["slug"] == book["slug"]), None)
+    if idx is not None:
+        books[idx] = book
+    else:
+        at = next((i for i, b in enumerate(books) if b["slug"] == "template"), len(books))
+        books.insert(at, book)
     with open(BOOKS, "w", encoding="utf-8") as f:
         json.dump(books, f, ensure_ascii=False, indent=2)
         f.write("\n")
     return books
+
+
+def find_existing(books, title="", slug=""):
+    """Find a book by matching slug OR (case-insensitive) title."""
+    t = (title or "").strip().lower()
+    for b in books:
+        if slug and b.get("slug") == slug:
+            return b
+        if t and b.get("title", "").strip().lower() == t:
+            return b
+    return None
 
 
 SYSTEM = """You produce book-summary data for a personal library.
@@ -252,12 +266,20 @@ PAGE = r"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
  .primary{background:#e0762f;color:#fff}.primary:hover{background:#c9651f}
  .ghost{background:#12203a;color:#fff}.ghost:hover{background:#22375f}
  .ghost[disabled],.primary[disabled]{opacity:.5;cursor:not-allowed}
+ .openbtn{display:inline-block;text-decoration:none;padding:12px 18px;margin-top:18px;
+   border-radius:10px;background:#4c9f70;color:#fff;font-weight:600;font-size:.95rem}
+ .openbtn:hover{background:#3f8a5f}
  .bar{display:flex;gap:10px;flex-wrap:wrap}
  pre{background:#12203a;color:#e8eef7;padding:14px;border-radius:10px;font-size:.8rem;
    overflow:auto;max-height:300px;margin-top:16px;white-space:pre-wrap;word-break:break-word}
  .note{font-size:.82rem;color:#54617a;margin-top:8px}
  .status{margin-top:14px;font-size:.9rem;font-weight:600}
  .ok{color:#2f7d4f}.err{color:#c0392b}
+ .warn{color:#b5702a}
+ .paste-box.disabled{opacity:.45}
+ .vidbar{align-items:center;margin-top:18px}
+ .vidbar button{margin-top:0}
+ .vidbar .status{margin-top:0}
  textarea{width:100%;min-height:220px;margin-top:16px;padding:12px;border-radius:10px;
    border:2px solid #d6cfc2;font-family:ui-monospace,Menlo,monospace;font-size:.8rem}
  #videos{margin-top:6px}
@@ -279,20 +301,22 @@ PAGE = r"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 
   <label>Book title</label>
   <input id="title" placeholder="Deep Work">
-  <div class="row">
-    <div><label>Author</label><input id="author" placeholder="Cal Newport"></div>
-    <div><label>Accent (optional)</label><input id="accent" placeholder="auto — leave blank"></div>
-  </div>
+  <label>Author</label>
+  <input id="author" placeholder="Cal Newport">
+  <div class="status" id="existsmsg"></div>
+
   <label>YouTube summary URL (optional)</label>
   <input id="video" placeholder="https://youtu.be/… — or search below">
-  <div class="bar">
+  <div class="bar vidbar">
     <button class="ghost" id="findvid" onclick="findVideos()">Find summary videos</button>
+    <span class="status" id="vidstatus"></span>
   </div>
   <div id="videos"></div>
 
   <div class="bar">
     <button class="primary" id="gen" onclick="gen()">Generate summary</button>
   </div>
+  <div class="status" id="keystatus"></div>
   <div class="status" id="status"></div>
 
   <div class="paste-box" id="pasteBox">
@@ -307,6 +331,7 @@ PAGE = r"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 
   <div class="bar">
     <button class="ghost" id="save" onclick="save()" disabled>Save + make QR for this book</button>
+    <a class="openbtn" id="openlabel" target="_blank" rel="noopener" style="display:none">Open QR label ↗</a>
     <button class="ghost" id="pub" onclick="pub()" disabled>Publish to GitHub</button>
   </div>
   <p class="note">Save writes this book to <code>books.json</code> and creates a new <code>qr/&lt;slug&gt;.svg</code> + <code>qr/&lt;slug&gt;-label.html</code> — existing books are left alone. Publish runs git add / commit / push.</p>
@@ -325,9 +350,9 @@ async function post(path,body){
 async function gen(){
   const title=$('title').value.trim(), author=$('author').value.trim();
   if(!title||!author){setStatus('Enter a title and author first.','err');return;}
-  setStatus('Generating…'); $('gen').disabled=true;
+  setStatus(bookExists?'Regenerating…':'Generating…'); $('gen').disabled=true;
   try{
-    const d=await post('/generate',{title,author,accent:$('accent').value.trim(),video:$('video').value.trim()});
+    const d=await post('/generate',{title,author,video:$('video').value.trim()});
     $('json').value=JSON.stringify(d.book,null,2);
     setStatus('Draft ready — review and edit, then Save.','ok');
     $('save').disabled=false; $('pub').disabled=true;
@@ -336,11 +361,16 @@ async function gen(){
 }
 async function save(){
   let book; try{book=JSON.parse($('json').value);}catch(e){setStatus('JSON is invalid: '+e.message,'err');return;}
-  setStatus('Saving + rebuilding QRs…'); $('save').disabled=true;
+  setStatus('Saving + making QR…'); $('save').disabled=true;
   try{
     const d=await post('/save',{book});
-    setStatus('Saved "'+book.slug+'". Print: '+d.label,'ok'); showLog(d.log);
-    $('pub').disabled=false;
+    const labelUrl='/'+d.label;                       // e.g. /qr/deep-work-label.html
+    const a=$('openlabel'); a.href=labelUrl; a.style.display='inline-block';
+    showLog(d.log); $('pub').disabled=false;
+    checkExists();                                    // now exists -> flips to Regenerate
+    const w=window.open(labelUrl,'_blank');           // pop the label to print
+    if(w){ setStatus('Saved "'+book.slug+'". Label opened in a new window.','ok'); }
+    else { setStatus('Saved "'+book.slug+'". Popup blocked — click "Open QR label ↗".','ok'); }
   }catch(e){setStatus('Error: '+e.message,'err');}
   $('save').disabled=false;
 }
@@ -353,29 +383,62 @@ async function pub(){
 
 /* ---- API-key gating (change 2) ---- */
 const HAS_KEY = __HAS_KEY__;
+let bookExists = false;
+function setPasteEnabled(on){
+  $('paste').disabled=!on; $('build').disabled=!on;
+  $('pasteBox').classList.toggle('disabled', !on);
+}
+function applyGenLabel(){
+  $('gen').textContent = bookExists ? 'Regenerate summary' : 'Generate summary';
+}
+async function checkExists(){
+  const title=$('title').value.trim();
+  if(!title){ bookExists=false; $('existsmsg').textContent=''; applyGenLabel(); return; }
+  try{
+    const d=await post('/exists',{title});
+    bookExists = !!d.exists;
+    if(bookExists){
+      $('existsmsg').textContent='Summary already exists — saving will overwrite it and its QR.';
+      $('existsmsg').className='status warn';
+    }else{
+      $('existsmsg').textContent=''; $('existsmsg').className='status';
+    }
+    applyGenLabel();
+  }catch(e){ /* ignore check failures */ }
+}
+let _existsTimer=null;
+function scheduleExistsCheck(){ clearTimeout(_existsTimer); _existsTimer=setTimeout(checkExists,350); }
+
 window.addEventListener('DOMContentLoaded',()=>{
-  if(!HAS_KEY){
-    $('gen').disabled=true;
-    $('gen').title='Set ANTHROPIC_API_KEY and restart to enable';
-    $('gen').textContent='Generate summary (key needed)';
-    setStatus('No API key detected — paste a summary below, or set ANTHROPIC_API_KEY and restart to enable Generate.');
+  const ks=$('keystatus');
+  if(HAS_KEY){
+    ks.textContent='Anthropic API Key available'; ks.className='status ok';
+    $('gen').disabled=false;
+    setPasteEnabled(false);   // key present -> generate; paste disabled
+    $('paste').placeholder='Paste is disabled — API key found, use Generate summary.';
   }else{
-    $('paste').placeholder='Optional: paste a ready-made summary instead of generating. '+$('paste').placeholder;
+    ks.textContent='Anthropic API Key not set'; ks.className='status warn';
+    $('gen').disabled=true;   // greyed via [disabled] style
+    $('gen').title='Set ANTHROPIC_API_KEY and restart to enable';
+    setPasteEnabled(true);    // no key -> paste a summary instead
   }
+  $('title').addEventListener('input', scheduleExistsCheck);
+  $('title').addEventListener('blur', checkExists);
 });
 
 /* ---- YouTube search + single-select (change 1) ---- */
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function setVid(t,cls){const s=$('vidstatus');s.textContent=t;s.className='status '+(cls||'');}
 async function findVideos(){
   const title=$('title').value.trim(), author=$('author').value.trim();
-  if(!title){setStatus('Enter a title first.','err');return;}
-  setStatus('Searching YouTube…'); $('findvid').disabled=true;
+  if(!title){setVid('Enter a title first.','err');return;}
+  setVid('Searching YouTube…'); $('findvid').disabled=true;
   try{
     const d=await post('/youtube',{title,author});
     renderVideos(d.videos||[]);
     const n=(d.videos||[]).length;
-    setStatus(n?('Found '+n+' — tick one, or none.'):'No videos found — paste a URL instead.', n?'ok':'err');
-  }catch(e){setStatus('Video search failed: '+e.message,'err');}
+    setVid(n?('Found '+n+' — Select only ONE.'):'No videos found — paste a URL instead.', n?'ok':'err');
+  }catch(e){setVid('Video search failed: '+e.message,'err');}
   $('findvid').disabled=false;
 }
 function renderVideos(vids){
@@ -425,7 +488,7 @@ function buildFromPaste(){
   if(!title||!author){setStatus('Enter title and author first.','err');return;}
   const text=$('paste').value.trim();
   if(!text){setStatus('Paste a summary first.','err');return;}
-  const book=textToBook(text,title,author,$('video').value.trim(),$('accent').value.trim());
+  const book=textToBook(text,title,author,$('video').value.trim(),'');
   $('json').value=JSON.stringify(book,null,2);
   setStatus('Built from your paste — review/edit the JSON, then Save.','ok');
   $('save').disabled=false; $('pub').disabled=true;
@@ -454,24 +517,59 @@ class Handler(BaseHTTPRequestHandler):
             page = (PAGE.replace("__MODEL__", MODEL)
                         .replace("__HAS_KEY__", "true" if API_KEY else "false"))
             self._send(200, page, "text/html; charset=utf-8")
+        elif self.path.startswith("/qr/"):
+            self._serve_qr(self.path)
         else:
             self._send(404, json.dumps({"error": "not found"}))
+
+    def _serve_qr(self, path):
+        rel = urllib.parse.unquote(path.split("?")[0]).lstrip("/")
+        safe = os.path.normpath(rel)
+        # only allow files inside the qr/ folder — block traversal / absolute paths
+        if os.path.isabs(safe) or safe != rel or not (safe == "qr" or safe.startswith("qr" + os.sep)):
+            self._send(404, json.dumps({"error": "not found"}))
+            return
+        if not os.path.isfile(safe):
+            self._send(404, json.dumps({"error": "not found"}))
+            return
+        ctype = ("text/html; charset=utf-8" if safe.endswith(".html")
+                 else "image/svg+xml" if safe.endswith(".svg")
+                 else "application/octet-stream")
+        with open(safe, "rb") as f:
+            self._send(200, f.read(), ctype)
 
     def do_POST(self):
         try:
             body = self._json_body()
             if self.path == "/generate":
-                slug = slugify(body["title"])
-                accent = pick_accent(load_books(), body.get("accent", ""))
-                book = generate(body["title"], body["author"], slug, accent, body.get("video", ""))
+                title, author = body["title"], body["author"]
+                books = load_books()
+                m = find_existing(books, title, slugify(title))
+                slug = m["slug"] if m else slugify(title)
+                accent = (m.get("accent") if m and m.get("accent") else pick_accent(books))
+                video = body.get("video") or (m.get("video", "") if m else "")
+                book = generate(title, author, slug, accent, video)
                 self._send(200, json.dumps({"book": book}))
             elif self.path == "/youtube":
                 vids = youtube_search(body.get("title", ""), body.get("author", ""))
                 self._send(200, json.dumps({"videos": vids}))
+            elif self.path == "/exists":
+                title = body.get("title", "")
+                m = find_existing(load_books(), title, slugify(title))
+                self._send(200, json.dumps({"exists": m is not None,
+                                            "slug": (m["slug"] if m else slugify(title))}))
             elif self.path == "/save":
                 book = body["book"]
+                books = load_books()
+                m = find_existing(books, book.get("title", ""), book.get("slug", ""))
+                if m:
+                    book["slug"] = m["slug"]                       # overwrite the same entry
+                    if not book.get("accent"):
+                        book["accent"] = m.get("accent", "")
+                    if not book.get("video"):
+                        book["video"] = m.get("video", "")
                 if not book.get("accent"):
-                    book["accent"] = pick_accent(load_books())
+                    book["accent"] = pick_accent(books)
                 upsert_book(book)
                 res = gen_qr_for(book)
                 self._send(200, json.dumps({

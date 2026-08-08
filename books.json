@@ -192,6 +192,100 @@
     ]
   },
   {
+    "slug": "where-good-ideas-come-from",
+    "title": "Where Good Ideas Come From",
+    "author": "Steven Johnson",
+    "subtitle": "Innovation is a network, not a lightning bolt",
+    "accent": "#c0563f",
+    "video": "https://www.youtube.com/watch?v=KElKQ1_K61k",
+    "chapters": [
+      {
+        "num": "01",
+        "title": "The Adjacent Possible",
+        "tag": "Boundaries",
+        "items": [
+          "<b>Map</b> the space of recombinations available right now, not the ideal future state you imagine.",
+          "<b>Combine</b> existing tools and parts before inventing new ones from scratch.",
+          "<b>Explore</b> one step beyond current knowledge instead of leaping toward a distant vision.",
+          "<b>Recognize</b> that every breakthrough opens new doors it couldn't have opened before.",
+          "<b>Avoid</b> forcing ideas too early; some doors only appear after others are opened."
+        ],
+        "mantra": {
+          "label": "Core Principle",
+          "text": "Innovation lives at the edge of what's currently possible, not in some distant leap."
+        }
+      },
+      {
+        "num": "02",
+        "title": "Liquid Networks",
+        "tag": "Connection",
+        "items": [
+          "<b>Build</b> environments dense enough for ideas to collide but loose enough to recombine freely.",
+          "<b>Seek</b> settings between order and chaos — cities, coffeehouses, coral reefs.",
+          "<b>Increase</b> the number of connections between minds, not just the number of minds.",
+          "<b>Design</b> spaces that force casual encounters between disciplines and strangers.",
+          "<b>Resist</b> isolating your best thinkers; connected mediocrity often outperforms isolated genius."
+        ]
+      },
+      {
+        "num": "03",
+        "title": "The Slow Hunch",
+        "tag": "Time",
+        "items": [
+          "<b>Nurture</b> half-formed ideas over years instead of discarding them for lack of instant clarity.",
+          "<b>Keep</b> a written record of tentative connections so hunches don't evaporate.",
+          "<b>Revisit</b> old notebooks and drafts; today's context can complete yesterday's insight.",
+          "<b>Collide</b> multiple slow hunches from different projects to spark a breakthrough.",
+          "<b>Protect</b> unfinished ideas from premature judgment or deadline pressure."
+        ]
+      },
+      {
+        "num": "04",
+        "title": "Serendipity",
+        "tag": "Chance",
+        "items": [
+          "<b>Wander</b> deliberately through unrelated fields, books, and conversations.",
+          "<b>Follow</b> tangents that seem irrelevant; they often carry the real insight.",
+          "<b>Diversify</b> your information diet to increase the odds of unexpected collisions.",
+          "<b>Talk</b> to people outside your specialty on a regular schedule, not just at conferences.",
+          "<b>Create</b> shared physical or digital spaces where unrelated ideas can bump into each other."
+        ],
+        "mantra": {
+          "label": "Reminder",
+          "text": "Chance favors the connected mind — engineer more surface area for luck."
+        }
+      },
+      {
+        "num": "05",
+        "title": "Error & Exaptation",
+        "tag": "Adaptation",
+        "items": [
+          "<b>Treat</b> mistakes as raw material for new directions, not failures to hide.",
+          "<b>Repurpose</b> tools, features, or ideas built for one use into an unrelated function.",
+          "<b>Scan</b> your own past failures for latent value under new conditions.",
+          "<b>Tolerate</b> noise and inefficiency in early experimentation; clean systems kill surprise.",
+          "<b>Ask</b> 'what else could this be used for?' whenever a project stalls."
+        ]
+      },
+      {
+        "num": "06",
+        "title": "Platforms",
+        "tag": "Leverage",
+        "items": [
+          "<b>Build</b> foundational tools that others can stack unexpected innovations on top of.",
+          "<b>Share</b> your infrastructure openly rather than hoarding it for competitive edge.",
+          "<b>Study</b> how ecosystems (coral reefs, cities, the web) generate value through openness.",
+          "<b>Layer</b> your own work on existing platforms instead of rebuilding basics.",
+          "<b>Favor</b> open, connected systems over closed, protected ones for long-term innovation."
+        ],
+        "mantra": {
+          "label": "Closing Principle",
+          "text": "The best innovations don't just solve problems — they become platforms for the next wave of ideas."
+        }
+      }
+    ]
+  },
+  {
     "slug": "template",
     "title": "Book Title Here",
     "author": "Author Name",

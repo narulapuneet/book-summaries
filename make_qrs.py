@@ -50,7 +50,12 @@ def _label_html(book, svg_inline):
    color:{accent}; font-weight:600; margin-top:3mm; }}
  .title {{ font-size:11pt; font-weight:600; margin-top:1mm; }}
  .author {{ font-size:8.5pt; color:#54617a; }}
- @media screen {{ body{{background:#e9e5dd;padding:24px}} .card{{background:#fff}} }}
+ .printbtn {{ display:none; }}
+ @media screen {{
+   body{{background:#e9e5dd;padding:24px}} .card{{background:#fff}}
+   .printbtn{{display:inline-block;margin-top:16px;padding:10px 16px;border:none;
+     border-radius:9px;background:{accent};color:#fff;font-weight:600;font-size:.9rem;cursor:pointer}}
+ }}
 </style></head><body>
  <div class="card">
    <div class="qr">{svg_inline}</div>
@@ -58,6 +63,7 @@ def _label_html(book, svg_inline):
    <div class="title">{book['title']}</div>
    <div class="author">{book['author']}</div>
  </div>
+ <button class="printbtn" onclick="window.print()">Print label</button>
 </body></html>"""
 
 
