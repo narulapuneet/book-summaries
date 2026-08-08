@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Summaries</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,1,500&family=Spline+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12203a; --paper:#f7f4ee; --line:#d6cfc2; --muted:#54617a;
+    --accent:#e0762f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Spline Sans',system-ui,sans-serif;background:var(--paper);
+    color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:660px;margin:0 auto;padding:0 20px 80px}
+  a{color:inherit}
+
+  /* ---- shared hero ---- */
+  header{position:relative;padding:56px 20px 40px;text-align:center;
+    background:linear-gradient(180deg,#12203a 0%,#243a63 60%,#3a5688 100%);
+    color:#fff;overflow:hidden}
+  header .glow{position:absolute;left:50%;bottom:-150px;transform:translateX(-50%);
+    width:360px;height:360px;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,var(--glow,rgba(224,118,47,.5)) 0%,rgba(0,0,0,0) 70%)}
+  .eyebrow{font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;
+    color:#c3cee0;font-weight:600;margin-bottom:16px}
+  header h1{font-family:'Fraunces',serif;font-weight:500;letter-spacing:-.01em;
+    font-size:clamp(2.1rem,8vw,3.1rem);line-height:1.03}
+  header h1 em{font-style:italic}
+  header .sub{margin:14px auto 0;font-size:.95rem;color:#c3cee0;max-width:32ch}
+  .back{display:inline-block;margin-top:20px;font-size:.8rem;font-weight:600;
+    letter-spacing:.02em;color:#c3cee0;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3);padding-bottom:2px}
+  .back:hover{color:#fff}
+
+  /* ---- library grid ---- */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:36px}
+  @media(max-width:460px){.grid{grid-template-columns:1fr}}
+  .book{display:block;text-decoration:none;background:#fff;border:1px solid var(--line);
+    border-radius:14px;padding:20px 18px;transition:transform .12s ease,box-shadow .12s ease}
+  .book:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(18,32,58,.12)}
+  .book .spine{width:34px;height:5px;border-radius:3px;margin-bottom:16px}
+  .book h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.2rem;line-height:1.12}
+  .book .by{font-size:.8rem;color:var(--muted);margin-top:6px}
+  .book .n{font-size:.72rem;color:var(--muted);margin-top:14px;letter-spacing:.04em}
+
+  /* ---- reader ---- */
+  .chapter{margin-top:38px}
+  .chapter-head{display:flex;align-items:baseline;gap:12px;
+    padding-bottom:11px;border-bottom:2px solid var(--ink)}
+  .num{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:600;flex:none}
+  .chapter-head h2{font-family:'Fraunces',serif;font-weight:500;
+    font-size:1.3rem;line-height:1.14;letter-spacing:-.01em}
+  .chapter-head .tag{display:block;font-family:'Spline Sans',sans-serif;
+    font-size:.75rem;font-weight:500;color:var(--muted);margin-top:3px}
+  ul{list-style:none;margin-top:4px}
+  li{position:relative;padding:13px 0 13px 30px;border-bottom:1px solid var(--line);font-size:1rem}
+  li:last-child{border-bottom:none}
+  li::before{content:"";position:absolute;left:2px;top:20px;width:9px;height:9px;
+    border-radius:2px;transform:rotate(45deg)}
+  li b{font-weight:600}
+  .mantra{margin:16px 0 4px;padding:16px 18px;border-radius:12px;background:#12203a;color:#f2ede3;
+    font-family:'Fraunces',serif;font-style:italic;font-size:1.02rem;line-height:1.4}
+  .mantra span{display:block;font-family:'Spline Sans',sans-serif;font-style:normal;
+    font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;font-weight:600}
+
+  footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);
+    text-align:center;font-size:.8rem;color:var(--muted)}
+  .load{padding:80px 20px;text-align:center;color:var(--muted)}
+
+  /* ---- video ---- */
+  .video{position:relative;margin-top:28px;aspect-ratio:16/9;border-radius:14px;
+    overflow:hidden;background:#12203a;box-shadow:0 10px 30px rgba(18,32,58,.18)}
+  .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vplay{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;
+    cursor:pointer;background:#12203a;display:block}
+  .vplay img{width:100%;height:100%;object-fit:cover;opacity:.75;display:block}
+  .vbtn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:64px;height:64px;border-radius:50%;background:rgba(224,118,47,.95);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 20px rgba(0,0,0,.35);transition:transform .12s ease}
+  .vplay:hover .vbtn{transform:translate(-50%,-50%) scale(1.08)}
+  .vbtn::after{content:"";margin-left:4px;border-style:solid;
+    border-width:11px 0 11px 18px;border-color:transparent transparent transparent #fff}
+  .vlabel{position:absolute;left:16px;bottom:14px;color:#fff;font-weight:600;
+    font-size:.9rem;letter-spacing:.01em;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+</style>
+</head>
+<body>
+  <div id="app"><div class="load">Loading…</div></div>
+
+<script>
+const app = document.getElementById('app');
+let BOOKS = [];
+
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+// items intentionally allow inline <b>; they are authored, not user input.
+
+function ytId(url){
+  if(!url) return '';
+  const m = String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : '';
+}
+
+function videoBlock(url){
+  const id = ytId(url);
+  if(!id) return '';
+  return `<div class="video" data-id="${id}">
+      <button class="vplay" type="button" onclick="playVid(this)" aria-label="Play summary video">
+        <img loading="lazy" src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="">
+        <span class="vbtn"></span>
+        <span class="vlabel">Watch the summary</span>
+      </button>
+    </div>`;
+}
+
+function playVid(btn){
+  const wrap = btn.parentElement, id = wrap.dataset.id;
+  wrap.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0"
+      title="Summary video" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen></iframe>`;
+}
+
+function tint(hex,a){
+  const n=hex.replace('#','');
+  const r=parseInt(n.slice(0,2),16),g=parseInt(n.slice(2,4),16),b=parseInt(n.slice(4,6),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+function renderHome(){
+  document.title = 'Book Summaries';
+  const cards = BOOKS.map(b=>`
+    <a class="book" href="#${b.slug}">
+      <div class="spine" style="background:${b.accent}"></div>
+      <h3>${esc(b.title)}</h3>
+      <div class="by">${esc(b.author)}</div>
+      <div class="n">${b.chapters.length} sections →</div>
+    </a>`).join('');
+  app.innerHTML = `
+    <header style="--glow:${tint('#e0762f',.5)}">
+      <div class="glow"></div>
+      <div class="eyebrow">Personal Library</div>
+      <h1>Book <em>Summaries</em></h1>
+      <p class="sub">Scan a book's code to jump straight to its takeaways.</p>
+    </header>
+    <div class="wrap"><div class="grid">${cards}</div>
+      <footer>Action-first notes · for personal reference</footer>
+    </div>`;
+  window.scrollTo(0,0);
+}
+
+function renderBook(book){
+  document.title = book.title + ' — Summary';
+  const chapters = book.chapters.map(c=>{
+    const mantra = c.mantra ? `<div class="mantra"><span style="color:${tint(book.accent,1)}">${esc(c.mantra.label)}</span>${esc(c.mantra.text)}</div>` : '';
+    const items = c.items.map(i=>`<li>${i}</li>`).join('');
+    const tag = c.tag ? `<span class="tag">${esc(c.tag)}</span>` : '';
+    return `<section class="chapter">
+      <div class="chapter-head">
+        <span class="num" style="color:${book.accent}">${esc(c.num)}</span>
+        <h2>${esc(c.title)}${tag}</h2>
+      </div>
+      ${mantra}
+      <ul>${items}</ul>
+    </section>`;
+  }).join('');
+  app.innerHTML = `
+    <header style="--glow:${tint(book.accent,.5)}">
+      <div class="glow"></div>
+      <div class="eyebrow">${esc(book.author)}</div>
+      <h1>${esc(book.title)}</h1>
+      ${book.subtitle?`<p class="sub">${esc(book.subtitle)}</p>`:''}
+      <a class="back" href="#">← All books</a>
+    </header>
+    <div class="wrap"
+         style="--accent:${book.accent}">
+      <style>.wrap li::before{background:${book.accent}}.video .vbtn{background:${tint(book.accent,.95)}}</style>
+      ${videoBlock(book.video)}
+      ${chapters}
+      <footer>Takeaways from <em>${esc(book.title)}</em> · for personal reference</footer>
+    </div>`;
+  window.scrollTo(0,0);
+}
+
+function route(){
+  const slug = decodeURIComponent(location.hash.replace(/^#/,'')).trim();
+  if(!slug){ renderHome(); return; }
+  const book = BOOKS.find(b=>b.slug===slug);
+  book ? renderBook(book) : renderHome();
+}
+
+fetch('./books.json')
+  .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(data=>{ BOOKS = data; route(); })
+  .catch(e=>{ app.innerHTML = `<div class="load">Couldn't load books.json (${e.message}).<br>Make sure it sits next to index.html and you're viewing over http, not file://.</div>`; });
+
+window.addEventListener('hashchange', route);
+</script>
+</body>
+</html>

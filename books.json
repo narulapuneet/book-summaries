@@ -1,0 +1,133 @@
+[
+    {
+        "slug": "big-leap",
+        "title": "The Big Leap",
+        "author": "Gay Hendricks",
+        "subtitle": "Break the upper limit. Live in your Zone of Genius.",
+        "accent": "#e0762f",
+        "video": "",
+        "chapters": [
+            {
+                "num": "01",
+                "title": "Preparing for Your Big Leap",
+                "tag": "The Upper Limit Problem",
+                "items": [
+                    "<b>Identify</b> your Upper Limit Problem — the inner thermostat that caps how much success, love, and joy you let yourself feel.",
+                    "<b>Watch</b> for self-sabotage right after things go well; that timing is the diagnostic tell.",
+                    "<b>Ask</b> the governing question daily: \u201cHow much love and success can I allow myself to enjoy?\u201d",
+                    "<b>Map</b> yourself across the four zones: incompetence, competence, excellence, genius.",
+                    "<b>Treat</b> the Zone of Excellence as the trap it is \u2014 comfortable, well-rewarded, and not where you belong."
+                ]
+            },
+            {
+                "num": "02",
+                "title": "Making the Leap",
+                "tag": "Dismantling the hidden barriers",
+                "items": [
+                    "<b>Name</b> which false belief holds you back: feeling fundamentally flawed, fearing success means disloyalty or abandonment, believing more success is a bigger burden, or fearing you'll outshine others.",
+                    "<b>Treat</b> each barrier as an old fear, not a present fact.",
+                    "<b>Trace</b> the belief to its childhood origin, then separate it from your adult reality.",
+                    "<b>Extend</b> how long you let a good feeling last \u2014 push past your usual cutoff on purpose.",
+                    "<b>Choose</b> expansion consciously each time the old story resurfaces."
+                ]
+            },
+            {
+                "num": "03",
+                "title": "Getting Specific",
+                "tag": "Spotting the ULP in daily life",
+                "items": [
+                    "<b>Catch</b> worry that points to no real, actionable threat \u2014 it's an Upper Limit habit, not useful foresight.",
+                    "<b>Receive</b> compliments and positive energy fully instead of deflecting them.",
+                    "<b>Audit</b> your integrity breaches: broken agreements and truths left unspoken.",
+                    "<b>Recognize</b> blame and criticism as ways you dump good energy.",
+                    "<b>Notice</b> manufactured arguments, illnesses, and accidents that follow your highs.",
+                    "<b>Speak</b> the significant truths you've been withholding."
+                ]
+            },
+            {
+                "num": "04",
+                "title": "Building a New Home in Your Zone of Genius",
+                "tag": "Finding your unique ability",
+                "items": [
+                    "<b>Answer</b> the four questions: what you most love to do, what doesn't feel like work, what gives the highest results-to-effort ratio, and what your unique ability is.",
+                    "<b>Pin down</b> your unique ability \u2014 the specific thing only you do best.",
+                    "<b>Reallocate</b> time away from excellence activities toward genius ones.",
+                    "<b>Keep</b> \u201cwondering\u201d as an open-ended practice rather than forcing a fast answer.",
+                    "<b>Commit</b> to genius as a way of being, not a weekend hobby."
+                ]
+            },
+            {
+                "num": "05",
+                "title": "Living in Your Zone of Genius",
+                "tag": "The Ultimate Success Mantra",
+                "mantra": {
+                    "label": "Ultimate Success Mantra",
+                    "text": "I expand in abundance, success, and love every day, as I inspire those around me to do the same."
+                },
+                "items": [
+                    "<b>Deploy</b> the mantra the moment you catch yourself Upper-Limiting.",
+                    "<b>Frame</b> your growth as inspiring others rather than abandoning or outshining them.",
+                    "<b>Use</b> it as ongoing course-correction, not a one-time affirmation."
+                ]
+            },
+            {
+                "num": "06",
+                "title": "Living in Einstein Time",
+                "tag": "Time abundance",
+                "items": [
+                    "<b>Own</b> that you are where time comes from \u2014 stop casting yourself as time's victim.",
+                    "<b>Drop</b> \u201cI don't have enough time\u201d from your language and your thinking.",
+                    "<b>Locate</b> where you're avoiding responsibility whenever you feel time-pressured.",
+                    "<b>Stop</b> persecuting yourself and others over time.",
+                    "<b>Do</b> more of what you love to expand your felt experience of time."
+                ]
+            },
+            {
+                "num": "07",
+                "title": "Solving the Relationship Problem",
+                "tag": "The Ultimate Relationship Mantra",
+                "mantra": {
+                    "label": "Ultimate Relationship Mantra",
+                    "text": "I expand in love and creativity every day, as I inspire those around me to do the same."
+                },
+                "items": [
+                    "<b>End</b> the blame game by taking 100% responsibility \u2014 not a 50/50 split.",
+                    "<b>Spot</b> the Upper Limit Problem in relationships: sabotage that kicks in after closeness deepens.",
+                    "<b>Speak</b> unarguable truths (\u201cI feel\u2026\u201d) instead of accusations (\u201cyou always\u2026\u201d).",
+                    "<b>Make</b> clear agreements and keep them."
+                ]
+            }
+        ]
+    },
+    {
+        "slug": "template",
+        "title": "Book Title Here",
+        "author": "Author Name",
+        "subtitle": "One-line hook for the book.",
+        "accent": "#3f7a6d",
+        "video": "https://www.youtube.com/watch?v=VIDEO_ID",
+        "chapters": [
+            {
+                "num": "01",
+                "title": "Chapter or section title",
+                "tag": "Optional subtitle",
+                "items": [
+                    "<b>LeadVerb</b> the rest of the takeaway.",
+                    "<b>Another</b> action-first takeaway."
+                ]
+            },
+            {
+                "num": "02",
+                "title": "Next section",
+                "tag": "",
+                "mantra": {
+                    "label": "Optional callout",
+                    "text": "Use a mantra block only when the book has a memorable line worth boxing."
+                },
+                "items": [
+                    "<b>Copy</b> this template object, change the slug, and add it to the list."
+                ]
+            }
+        ]
+    }
+]
