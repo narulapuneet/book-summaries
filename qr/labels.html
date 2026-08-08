@@ -1,0 +1,35 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>Book QR labels</title>
+<style>
+  @page { margin: 12mm; }
+  body { font-family: system-ui, sans-serif; color:#12203a; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10mm; }
+  .card { border:1px dashed #b9b1a1; border-radius:6px; padding:6mm;
+           text-align:center; break-inside:avoid; background:#fff; }
+  .card img { width:34mm; height:34mm; }
+  .scan { font-size:8pt; letter-spacing:.12em; text-transform:uppercase;
+           color:#e0762f; font-weight:600; margin-top:3mm; }
+  .title { font-size:11pt; font-weight:600; margin-top:1mm; }
+  .author { font-size:8.5pt; color:#54617a; }
+  h1 { font-size:13pt; font-weight:600; margin-bottom:6mm; }
+</style></head>
+<body>
+  <h1>Book summary QR labels — cut along the dashed lines</h1>
+  <div class="grid">
+    <div class="card">
+      <img src="big-leap.svg" alt="QR for The Big Leap">
+      <div class="meta">
+        <div class="scan">Scan for summary</div>
+        <div class="title">The Big Leap</div>
+        <div class="author">Gay Hendricks</div>
+      </div>
+    </div><div class="card">
+      <img src="template.svg" alt="QR for Book Title Here">
+      <div class="meta">
+        <div class="scan">Scan for summary</div>
+        <div class="title">Book Title Here</div>
+        <div class="author">Author Name</div>
+      </div>
+    </div>
+  </div>
+</body></html>
