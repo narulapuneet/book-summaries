@@ -22,6 +22,7 @@ from qrcode.image.svg import SvgPathImage
 BASE_URL = "https://narulapuneet.github.io/book-summaries"
 # --------------------------------------------------
 OUT = "qr"
+SKIP_SLUGS = {"template"}   # placeholder entries — never get a QR
 
 
 def _svg_inline(url):
@@ -87,7 +88,14 @@ def make_one(book, base_url=BASE_URL, out=OUT):
 def make_all(base_url=BASE_URL, out=OUT):
     with open("books.json", encoding="utf-8") as f:
         books = json.load(f)
+    books = [b for b in books if b["slug"] not in SKIP_SLUGS]
     results = [make_one(b, base_url, out) for b in books]
+    # clean up any stale QR files for placeholder slugs
+    for s in SKIP_SLUGS:
+        for fn in (f"{s}.svg", f"{s}-label.html"):
+            fp = os.path.join(out, fn)
+            if os.path.exists(fp):
+                os.remove(fp)
     make_sheet(base_url, out)
     for r in results:
         print(f"  {os.path.basename(r['svg']):<22} {r['url']}")
@@ -111,6 +119,7 @@ def make_sheet(base_url=BASE_URL, out=OUT):
     os.makedirs(out, exist_ok=True)
     with open("books.json", encoding="utf-8") as f:
         books = json.load(f)
+    books = [b for b in books if b["slug"] not in SKIP_SLUGS]
     cards = "".join(_card_html(b, _svg_inline(f"{base_url}/#{b['slug']}")) for b in books)
     html = f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <title>All QR codes</title>

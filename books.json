@@ -463,6 +463,101 @@
     ]
   },
   {
+    "slug": "indistractable",
+    "title": "Indistractable",
+    "author": "Nir Eyal",
+    "subtitle": "Control your attention, choose your life",
+    "accent": "#7a5aa8",
+    "video": "https://www.youtube.com/watch?v=fGbhsLEMizA",
+    "chapters": [
+      {
+        "num": "01",
+        "title": "Understand Distraction",
+        "tag": "Foundations",
+        "items": [
+          "<b>Redefine</b> distraction as any action pulling you from what you planned to do, not just phones.",
+          "<b>Recognize</b> traction as the opposite force: actions that move you toward your values.",
+          "<b>Accept</b> that discomfort, not technology, is the root cause of distraction.",
+          "<b>Identify</b> the internal trigger—an uncomfortable emotion—right before you reach for a distraction.",
+          "<b>Reject</b> the myth that willpower alone can fix distraction long-term."
+        ],
+        "mantra": {
+          "label": "Root Cause",
+          "text": "We don't crave the distraction itself; we crave escape from discomfort."
+        }
+      },
+      {
+        "num": "02",
+        "title": "Master Internal Triggers",
+        "tag": "Mindset",
+        "items": [
+          "<b>Log</b> the emotion and situation triggering urges to distract using a trigger journal.",
+          "<b>Surf</b> the urge for ten minutes instead of acting on it immediately.",
+          "<b>Reimagine</b> the uncomfortable task by finding an interesting element inside it.",
+          "<b>Reimagine</b> your temperament—stop believing you're inherently unable to focus.",
+          "<b>Create</b> a mental buffer between trigger and reaction by naming the feeling out loud.",
+          "<b>Practice</b> self-compassion after a lapse instead of harsh self-criticism, which fuels repeat distraction."
+        ]
+      },
+      {
+        "num": "03",
+        "title": "Make Time for Traction",
+        "tag": "Values → Schedule",
+        "items": [
+          "<b>Define</b> your values across three life domains: yourself, relationships, and work.",
+          "<b>Convert</b> values into time-boxed calendar blocks, not vague to-do lists.",
+          "<b>Schedule</b> time for yourself first—sleep, exercise, and reflection are non-negotiable inputs.",
+          "<b>Block</b> time for relationships proactively, even small daily check-ins.",
+          "<b>Timebox</b> work tasks so effort is measured by planned time, not urgency.",
+          "<b>Review</b> your calendar against actual behavior weekly to catch drift."
+        ],
+        "mantra": {
+          "label": "Traction Test",
+          "text": "If it's not in your calendar, it's not actually a priority."
+        }
+      },
+      {
+        "num": "04",
+        "title": "Hack Back External Triggers",
+        "tag": "Environment",
+        "items": [
+          "<b>Ask</b> whether each external trigger (ping, notification, person) serves your current timeboxed task.",
+          "<b>Strip</b> non-essential notifications and apps from your phone's home screen.",
+          "<b>Batch</b> email and messages into scheduled checking windows instead of constant monitoring.",
+          "<b>Rearrange</b> your workspace to remove visual cues that spark unplanned distraction.",
+          "<b>Turn</b> group chats and meetings into opt-in, purpose-driven interactions.",
+          "<b>Question</b> every trigger: does it serve me, or am I serving it?"
+        ]
+      },
+      {
+        "num": "05",
+        "title": "Prevent Distraction with Pacts",
+        "tag": "Commitment devices",
+        "items": [
+          "<b>Set</b> effort pacts that add friction to distracting behaviors, like logging out after each use.",
+          "<b>Set</b> price pacts, wagering money you'll lose if you break your plan.",
+          "<b>Set</b> identity pacts by relabeling yourself as 'indistractable' rather than fighting willpower.",
+          "<b>Use</b> tools like website blockers or timers as reinforcement, not replacement, for planning.",
+          "<b>Announce</b> your pact publicly to add social accountability.",
+          "<b>Design</b> pacts around your specific weak moments, not generic rules."
+        ]
+      },
+      {
+        "num": "06",
+        "title": "Build Indistractable Relationships",
+        "tag": "Kids, partners, teams",
+        "items": [
+          "<b>Model</b> focused behavior for kids instead of just restricting their screen time.",
+          "<b>Discuss</b> values with children so they build their own timeboxed schedules.",
+          "<b>Create</b> tech-free zones and times shared by the whole family.",
+          "<b>Negotiate</b> workplace norms explicitly—define when responsiveness is truly required.",
+          "<b>Foster</b> psychological safety at work so employees admit distraction without shame.",
+          "<b>Audit</b> team tools and meeting culture for triggers that erode collective focus."
+        ]
+      }
+    ]
+  },
+  {
     "slug": "template",
     "title": "Book Title Here",
     "author": "Author Name",
