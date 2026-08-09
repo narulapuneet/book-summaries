@@ -51,7 +51,11 @@ def load_books():
     if not os.path.exists(BOOKS):
         return []
     with open(BOOKS, encoding="utf-8") as f:
-        return json.load(f)
+        content = f.read()
+    try:
+        return json.loads(content)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"books.json is not valid JSON — {e}. Fix or restore that file.")
 
 
 def pick_accent(books, wanted=""):
@@ -120,7 +124,7 @@ def generate(title, author, slug, accent, video):
             f"Generate the summary JSON now.")
     payload = {
         "model": MODEL,
-        "max_tokens": 3000,
+        "max_tokens": 8000,
         "system": SYSTEM,
         "messages": [{"role": "user", "content": user}],
     }
@@ -135,7 +139,7 @@ def generate(title, author, slug, accent, video):
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=120) as r:
+        with urllib.request.urlopen(req, timeout=180) as r:
             data = json.load(r)
     except urllib.error.HTTPError as e:
         detail = e.read().decode(errors="replace")
@@ -144,9 +148,22 @@ def generate(title, author, slug, accent, video):
         except Exception:
             pass
         raise RuntimeError(f"Anthropic API {e.code}: {detail}")
+
     text = "".join(b.get("text", "") for b in data.get("content", []) if b.get("type") == "text")
-    text = re.sub(r"^```(json)?|```$", "", text.strip(), flags=re.MULTILINE).strip()
-    book = json.loads(text)
+    stop = data.get("stop_reason")
+    # extract the JSON object even if the model added fences or stray prose
+    start = text.find("{")
+    raw = _balanced_json(text, start) if start != -1 else None
+    if not raw:
+        if stop == "max_tokens":
+            raise RuntimeError("The model's reply was cut off (max_tokens). "
+                               "Try Generate again, or shorten the request.")
+        raise RuntimeError("No complete JSON object in the model reply. "
+                           "Starts with: " + (text[:160].replace("\n", " ") or "(empty)"))
+    try:
+        book = json.loads(raw)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"Model returned malformed JSON ({e}). Try Generate again.")
     # force server-controlled fields
     book["slug"], book["accent"], book["video"] = slug, accent, video
     book["title"], book["author"] = title, author
@@ -387,7 +404,6 @@ async function save(){
     const labelUrl='/'+d.label;                       // e.g. /qr/deep-work-label.html
     const a=$('openlabel'); a.href=labelUrl; a.style.display='inline-block';
     showLog(d.log); $('pub').disabled=false;
-    checkExists();                                    // now exists -> flips to Regenerate
     const w=window.open(labelUrl,'_blank');           // pop the label to print
     if(w){ setStatus('Saved "'+book.slug+'". Label opened in a new window.','ok'); }
     else { setStatus('Saved "'+book.slug+'". Popup blocked — click "Open QR label ↗".','ok'); }
@@ -413,9 +429,11 @@ function applyGenLabel(){
 }
 async function checkExists(){
   const title=$('title').value.trim();
+  const reqTitle=title;
   if(!title){ bookExists=false; $('existsmsg').textContent=''; applyGenLabel(); return; }
   try{
     const d=await post('/exists',{title});
+    if($('title').value.trim()!==reqTitle) return;   // title changed meanwhile — ignore stale reply
     bookExists = !!d.exists;
     if(bookExists){
       $('existsmsg').textContent='Summary already exists — saving will overwrite it and its QR.';

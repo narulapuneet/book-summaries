@@ -377,6 +377,92 @@
     ]
   },
   {
+    "slug": "focus",
+    "title": "Focus",
+    "author": "Daniel Koleman",
+    "subtitle": "Master attention to master performance",
+    "accent": "#b8863b",
+    "video": "https://www.youtube.com/watch?v=x67xXtD2xDs",
+    "chapters": [
+      {
+        "num": "01",
+        "title": "The Anatomy of Attention",
+        "tag": "Foundations",
+        "items": [
+          "<b>Distinguish</b> top-down effortful focus from bottom-up automatic reactions.",
+          "<b>Recognize</b> that willpower is a finite mental muscle that depletes with overuse.",
+          "<b>Protect</b> deep-focus blocks from the constant pull of digital interruptions.",
+          "<b>Notice</b> when your mind wanders and gently redirect it—this is the core rep of attention training.",
+          "<b>Understand</b> that selective attention filters an overwhelming world into usable information."
+        ],
+        "mantra": {
+          "label": "Triad of Focus",
+          "text": "Excellence rests on three lenses: awareness of self, empathy for others, and understanding of the wider systems you operate in."
+        }
+      },
+      {
+        "num": "02",
+        "title": "Self-Awareness: Inner Focus",
+        "tag": "Inner",
+        "items": [
+          "<b>Tune</b> into bodily signals and gut feelings before making key decisions.",
+          "<b>Label</b> emotions accurately in the moment instead of letting them run unchecked.",
+          "<b>Reflect</b> daily on what triggered your strongest reactions and why.",
+          "<b>Separate</b> your authentic values from inherited or reactive impulses through quiet self-check-ins.",
+          "<b>Use</b> self-awareness as the sensor system that feeds every other focus skill."
+        ]
+      },
+      {
+        "num": "03",
+        "title": "Self-Management: Mastering Distraction",
+        "tag": "Control",
+        "items": [
+          "<b>Delay</b> gratification by rehearsing the 'cool' long-term goal over the 'hot' immediate impulse.",
+          "<b>Build</b> routines and environments that reduce the need for constant willpower.",
+          "<b>Practice</b> mindfulness meditation to strengthen the neural circuits of sustained attention.",
+          "<b>Interrupt</b> rumination loops by shifting attention deliberately to a neutral anchor like breath.",
+          "<b>Schedule</b> recovery periods to replenish depleted cognitive control."
+        ]
+      },
+      {
+        "num": "04",
+        "title": "Empathy: Other Focus",
+        "tag": "Social",
+        "items": [
+          "<b>Practice</b> cognitive empathy by actively imagining another person's perspective.",
+          "<b>Read</b> nonverbal cues—tone, posture, micro-expressions—to sense unspoken emotions.",
+          "<b>Listen</b> fully without planning your response, giving complete attention to the speaker.",
+          "<b>Calibrate</b> empathic concern so it drives helpful action rather than emotional overwhelm.",
+          "<b>Develop</b> social attunement as the base skill for teamwork, negotiation, and leadership."
+        ]
+      },
+      {
+        "num": "05",
+        "title": "Systems Awareness: Outer Focus",
+        "tag": "Systems",
+        "items": [
+          "<b>Zoom</b> out regularly to see how your actions ripple through larger systems and networks.",
+          "<b>Question</b> short-term incentives that ignore long-term systemic consequences.",
+          "<b>Map</b> the invisible interdependencies—economic, ecological, organizational—that shape outcomes.",
+          "<b>Anticipate</b> unintended effects before implementing large-scale decisions.",
+          "<b>Cultivate</b> big-picture thinking as a counterbalance to narrow, reactive focus."
+        ]
+      },
+      {
+        "num": "06",
+        "title": "Leading with Focus",
+        "tag": "Leadership",
+        "items": [
+          "<b>Model</b> the triad of focus—self, others, systems—for those you lead.",
+          "<b>Prioritize</b> ruthlessly, protecting attention for what truly matters strategically.",
+          "<b>Coach</b> teams to strengthen their own attentional discipline, not just deliver results.",
+          "<b>Balance</b> deep focus work with open awareness to catch emerging opportunities and risks.",
+          "<b>Design</b> organizational culture that values sustained attention over constant reactivity."
+        ]
+      }
+    ]
+  },
+  {
     "slug": "template",
     "title": "Book Title Here",
     "author": "Author Name",
