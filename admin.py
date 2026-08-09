@@ -26,6 +26,13 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 # ---- config ----
+# Anchor everything to THIS file's folder, so books.json / qr / git always
+# resolve to the repo — no matter which directory the tool is launched from.
+HERE = os.path.dirname(os.path.abspath(__file__))
+os.chdir(HERE)
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
+
 PORT = 8000
 MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")  # change if you use another
 API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
@@ -228,11 +235,16 @@ def youtube_search(title, author, limit=5):
 
 
 def gen_qr_for(book):
-    """Generate QR + label for ONE book only; existing files untouched."""
+    """Generate QR + label for ONE book, and refresh the combined all-QR sheet."""
     import importlib
     mk = importlib.import_module("make_qrs")
     importlib.reload(mk)  # pick up any BASE_URL change
-    return mk.make_one(book)
+    res = mk.make_one(book)
+    try:
+        res["sheet"] = mk.make_sheet()
+    except Exception:
+        res["sheet"] = ""
+    return res
 
 
 def publish():
@@ -269,6 +281,10 @@ PAGE = r"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
  .openbtn{display:inline-block;text-decoration:none;padding:12px 18px;margin-top:18px;
    border-radius:10px;background:#4c9f70;color:#fff;font-weight:600;font-size:.95rem}
  .openbtn:hover{background:#3f8a5f}
+ .toolbar{margin-top:0;margin-bottom:6px;justify-content:space-between}
+ .toolbar .openbtn{margin-top:0}
+ .toolbar #reset{margin-top:0;background:#7a5a3a}
+ .toolbar #reset:hover{background:#63492e}
  .bar{display:flex;gap:10px;flex-wrap:wrap}
  pre{background:#12203a;color:#e8eef7;padding:14px;border-radius:10px;font-size:.8rem;
    overflow:auto;max-height:300px;margin-top:16px;white-space:pre-wrap;word-break:break-word}
@@ -298,6 +314,10 @@ PAGE = r"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <div class="panel">
   <h1>Library control panel</h1>
   <p class="sub">Generate a summary, save it, publish it. Model: __MODEL__</p>
+  <div class="bar toolbar">
+    <a class="openbtn" id="viewall" href="/qr/all-labels.html" target="_blank" rel="noopener">View all QR codes ↗</a>
+    <button class="ghost" id="reset" onclick="resetForm()">Reset</button>
+  </div>
 
   <label>Book title</label>
   <input id="title" placeholder="Deep Work">
@@ -408,6 +428,18 @@ async function checkExists(){
 }
 let _existsTimer=null;
 function scheduleExistsCheck(){ clearTimeout(_existsTimer); _existsTimer=setTimeout(checkExists,350); }
+
+function resetForm(){
+  ['title','author','video','paste','json'].forEach(id=>{ $(id).value=''; });
+  $('videos').innerHTML='';
+  setVid(''); setStatus('');
+  $('existsmsg').textContent=''; $('existsmsg').className='status';
+  $('openlabel').style.display='none';
+  $('log').style.display='none'; $('log').textContent='';
+  bookExists=false; applyGenLabel();
+  $('save').disabled=true; $('pub').disabled=true;
+  $('title').focus();
+}
 
 window.addEventListener('DOMContentLoaded',()=>{
   const ks=$('keystatus');
@@ -574,7 +606,10 @@ class Handler(BaseHTTPRequestHandler):
                 res = gen_qr_for(book)
                 self._send(200, json.dumps({
                     "svg": res["svg"], "label": res["label"],
-                    "log": f"Wrote {res['svg']}\nWrote {res['label']}\nURL: {res['url']}",
+                    "log": (f"Wrote {os.path.abspath(BOOKS)}\n"
+                            f"Wrote {os.path.abspath(res['svg'])}\n"
+                            f"Wrote {os.path.abspath(res['label'])}\n"
+                            f"URL: {res['url']}"),
                 }))
             elif self.path == "/publish":
                 self._send(200, json.dumps({"log": publish()}))
@@ -585,6 +620,14 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
+    print(f"Working folder: {HERE}")
+    print(f"books.json: {'found' if os.path.exists(BOOKS) else 'NOT here — a new one will be created on save!'}")
+    if os.path.exists(BOOKS):
+        try:
+            import importlib
+            importlib.import_module("make_qrs").make_sheet()   # so "View all QR" works immediately
+        except Exception:
+            pass
     if not API_KEY:
         print("!! Set your key first:  export ANTHROPIC_API_KEY=\"sk-ant-...\"")
     url = f"http://localhost:{PORT}"

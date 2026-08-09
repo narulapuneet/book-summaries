@@ -130,7 +130,7 @@ function tint(hex,a){
   return `rgba(${r},${g},${b},${a})`;
 }
 
-function renderHome(){
+function renderHome(missingSlug){
   document.title = 'Book Summaries';
   const cards = BOOKS.map(b=>`
     <a class="book" href="#${b.slug}">
@@ -139,6 +139,14 @@ function renderHome(){
       <div class="by">${esc(b.author)}</div>
       <div class="n">${b.chapters.length} sections →</div>
     </a>`).join('');
+  const notice = missingSlug ? `
+    <div style="max-width:660px;margin:22px auto 0;padding:0 20px">
+      <div style="background:#fbe9df;border:1px solid #efc3a6;color:#8a4a24;
+        border-radius:12px;padding:12px 14px;font-size:.9rem">
+        Couldn't find <b>“${esc(missingSlug)}”</b> in the library yet.
+        If you just added it, make sure it was published and give it a minute.
+      </div>
+    </div>` : '';
   app.innerHTML = `
     <header style="--glow:${tint('#e0762f',.5)}">
       <div class="glow"></div>
@@ -146,6 +154,7 @@ function renderHome(){
       <h1>Book <em>Summaries</em></h1>
       <p class="sub">Scan a book's code to jump straight to its takeaways.</p>
     </header>
+    ${notice}
     <div class="wrap"><div class="grid">${cards}</div>
       <footer>Action-first notes · for personal reference</footer>
     </div>`;
@@ -192,7 +201,7 @@ function route(){
   book ? renderBook(book) : renderHome();
 }
 
-fetch('./books.json')
+fetch('./books.json?ts=' + Date.now(), {cache:'no-store'})
   .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
   .then(data=>{ BOOKS = data; route(); })
   .catch(e=>{ app.innerHTML = `<div class="load">Couldn't load books.json (${e.message}).<br>Make sure it sits next to index.html and you're viewing over http, not file://.</div>`; });

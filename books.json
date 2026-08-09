@@ -286,6 +286,97 @@
     ]
   },
   {
+    "slug": "never-split-the-difference",
+    "title": "Never Split The Difference",
+    "author": "Chris Voss",
+    "subtitle": "Negotiate like your life depends on it",
+    "accent": "#5a6fb0",
+    "video": "https://www.youtube.com/watch?v=OaEw7ZFs5sU",
+    "chapters": [
+      {
+        "num": "01",
+        "title": "The New Rules",
+        "tag": "Mindset",
+        "items": [
+          "<b>Abandon</b> rational compromise as the goal; treat negotiation as an information-gathering process, not a battle of logic.",
+          "<b>Assume</b> emotions drive every decision, then use tactical empathy to steer them.",
+          "<b>Listen</b> harder than you talk; silence reveals more than persuasion.",
+          "<b>Reject</b> splitting the difference — it often produces a bad outcome for both sides.",
+          "<b>Prepare</b> for irrational behavior; treat the other side as unpredictable, not evil."
+        ]
+      },
+      {
+        "num": "02",
+        "title": "Be a Mirror",
+        "tag": "Rapport",
+        "items": [
+          "<b>Repeat</b> the last three words your counterpart said to prompt them to elaborate.",
+          "<b>Slow</b> your voice down and use a calm, late-night FM DJ tone to defuse tension.",
+          "<b>Pause</b> after mirroring — let silence pull out more information.",
+          "<b>Match</b> body language and tone subtly to build unconscious trust.",
+          "<b>Avoid</b> interrogative questions early; mirrors feel safer than direct asks."
+        ]
+      },
+      {
+        "num": "03",
+        "title": "Label Emotions, Don't Feel Them",
+        "tag": "Tactical Empathy",
+        "items": [
+          "<b>Name</b> the emotion you observe — 'It seems like...' or 'It sounds like...' — without judgment.",
+          "<b>Diagnose</b> the other side's fears and needs before proposing solutions.",
+          "<b>Stay</b> detached from your own emotional reaction to negotiate clearly.",
+          "<b>Accusation-audit</b> yourself: list every negative thing they could say about you and say it first.",
+          "<b>Validate</b> feelings to lower defensiveness, even if you disagree with the position."
+        ],
+        "mantra": {
+          "label": "Core Principle",
+          "text": "Label the fear before it controls the room."
+        }
+      },
+      {
+        "num": "04",
+        "title": "Beware 'Yes' — Master 'No'",
+        "tag": "Framing",
+        "items": [
+          "<b>Invite</b> 'no' early — it makes people feel safe and in control.",
+          "<b>Distinguish</b> counterfeit yes, confirmation yes, and commitment yes; aim only for the last.",
+          "<b>Ask</b> 'Is now a bad time to talk?' instead of pushing for immediate agreement.",
+          "<b>Reframe</b> rejection as the start of dialogue, not the end.",
+          "<b>Use</b> 'How am I supposed to do that?' to make demands feel impossible without saying no."
+        ]
+      },
+      {
+        "num": "05",
+        "title": "Trigger 'That's Right'",
+        "tag": "Alignment",
+        "items": [
+          "<b>Summarize</b> their situation so accurately they respond with 'that's right,' signaling real alignment.",
+          "<b>Avoid</b> 'you're right' — it's dismissive, not agreement.",
+          "<b>Reflect</b> their story back using their own words and priorities.",
+          "<b>Test</b> understanding by paraphrasing before proposing terms.",
+          "<b>Build</b> momentum from small agreements toward the larger deal."
+        ]
+      },
+      {
+        "num": "06",
+        "title": "Bend Reality & Bargain Hard",
+        "tag": "Tactics",
+        "items": [
+          "<b>Anchor</b> emotionally first, then set an extreme anchor number to skew the range.",
+          "<b>Deploy</b> the Ackerman model — start at 65%, then 85%, 95%, and 100% of target with decreasing increments.",
+          "<b>Ask</b> calibrated 'how' and 'what' questions to make them solve your problem.",
+          "<b>Guarantee</b> follow-through using the Rule of Three — get them to confirm commitment three times.",
+          "<b>Hunt</b> for Black Swans — unknown unknowns that can flip the entire negotiation.",
+          "<b>Use</b> odd, specific numbers to seem carefully calculated and credible."
+        ],
+        "mantra": {
+          "label": "Endgame",
+          "text": "The best deals come from unearthing what they haven't told you yet."
+        }
+      }
+    ]
+  },
+  {
     "slug": "template",
     "title": "Book Title Here",
     "author": "Author Name",

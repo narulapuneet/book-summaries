@@ -88,12 +88,62 @@ def make_all(base_url=BASE_URL, out=OUT):
     with open("books.json", encoding="utf-8") as f:
         books = json.load(f)
     results = [make_one(b, base_url, out) for b in books]
+    make_sheet(base_url, out)
     for r in results:
         print(f"  {os.path.basename(r['svg']):<22} {r['url']}")
     print(f"\nDone. {len(results)} books -> qr/<slug>.svg + qr/<slug>-label.html")
+    print(f"       combined sheet -> {os.path.join(out, 'all-labels.html')}")
     if "YOURNAME" in base_url:
         print("!! Set BASE_URL to your real site first, then re-run.")
     return results
+
+
+def _card_html(book, svg_inline):
+    accent = book.get("accent", "#e0762f")
+    return (f'<div class="card"><div class="qr">{svg_inline}</div>'
+            f'<div class="scan" style="color:{accent}">Scan for summary</div>'
+            f'<div class="title">{book["title"]}</div>'
+            f'<div class="author">{book["author"]}</div></div>')
+
+
+def make_sheet(base_url=BASE_URL, out=OUT):
+    """(Re)build qr/all-labels.html — a contact sheet of EVERY book's QR. Returns path."""
+    os.makedirs(out, exist_ok=True)
+    with open("books.json", encoding="utf-8") as f:
+        books = json.load(f)
+    cards = "".join(_card_html(b, _svg_inline(f"{base_url}/#{b['slug']}")) for b in books)
+    html = f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<title>All QR codes</title>
+<style>
+ @page {{ margin:12mm; }}
+ body {{ font-family:system-ui,-apple-system,sans-serif; color:#12203a; margin:0; }}
+ h1 {{ font-size:13pt; margin:0 0 5mm; }}
+ .grid {{ display:grid; grid-template-columns:repeat(3,1fr); gap:8mm; }}
+ .card {{ border:1px dashed #b9b1a1; border-radius:6px; padding:5mm; text-align:center; break-inside:avoid; }}
+ .qr {{ width:32mm; height:32mm; margin:0 auto; }}
+ .qr svg {{ width:32mm; height:32mm; display:block; }}
+ .scan {{ font-size:7.5pt; letter-spacing:.1em; text-transform:uppercase; font-weight:600; margin-top:2.5mm; }}
+ .title {{ font-size:10pt; font-weight:600; margin-top:1mm; }}
+ .author {{ font-size:8pt; color:#54617a; }}
+ .printbtn {{ display:none; }}
+ @media screen {{
+   body{{background:#e9e5dd;padding:24px}}
+   .wrap{{background:#fff;padding:22px;border-radius:12px;max-width:900px;margin:0 auto}}
+   .card{{background:#fff}}
+   .printbtn{{display:inline-block;margin:0 0 16px;padding:10px 16px;border:none;
+     border-radius:9px;background:#12203a;color:#fff;font-weight:600;cursor:pointer}}
+ }}
+</style></head><body>
+ <div class="wrap">
+   <button class="printbtn" onclick="window.print()">Print all</button>
+   <h1>All book QR codes — cut along the dashed lines</h1>
+   <div class="grid">{cards}</div>
+ </div>
+</body></html>"""
+    path = os.path.join(out, "all-labels.html")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(html)
+    return path
 
 
 if __name__ == "__main__":
